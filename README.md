@@ -1,42 +1,66 @@
-# GEAQUA-Capture-Zones
-Groundwater capture zone delineation tools for QGIS
+# GEAQUA Capture Zones
 
-## Description
+A bilingual Polish-English QGIS plugin for analytical delineation of groundwater time-of-travel capture zones around a **single pumping well**.
 
-GEAQUA Capture Zones is a QGIS plugin for approximate
-time-of-travel capture zone delineation around groundwater wells.
+## Current method
 
-The current calculation method is based primarily on:
+Version 0.39 implements the analytical approximations described by:
 
-Ceric, A. and Haitjema, H. (2005).
-On Using Simple Time-of-Travel Capture Zone Delineation Methods.
-Ground Water, 43(3), 408–412.
+> Ceric, A., Haitjema, H. (2005). *On Using Simple Time-of-Travel Capture Zone Delineation Methods*. Ground Water, 43(3), 408–412. DOI: 10.1111/j.1745-6584.2005.0035.x.
 
-## Current capabilities
+The dimensionless travel-time parameter `T̃` selects one of three geometries:
 
-- Centric circular capture zones
-- Eccentric circular capture zones
-- Capture zones for a well in a uniform groundwater flow field
-- Time variants: 1, 5, 10, 25 and 50 years
-- QGIS map preview
-- HTML and PDF calculation reports
-- Project saving and loading
-- Polish and English interface
+- `T̃ ≤ 0.1` — centric circular zone;
+- `0.1 < T̃ ≤ 1` — eccentric circular zone;
+- `T̃ > 1` — capture zone in uniform regional flow, bounded by the steady-state dividing streamline and truncated by the approximate upstream extent.
 
-## Requirements
+Supporting theoretical references are Grubb (1993) for steady-state capture-zone geometry and Bear and Jacobs (1965) for the underlying uniform-flow isochrone solution.
 
-- QGIS 3.22 or newer
-- Projected coordinate system with metre units
+## Main features
 
-## Authors
+- single-well analytical calculation;
+- Polish and English interface;
+- support for EPSG:2180, EPSG:2176–2179 and other projected metric CRSs;
+- zero ambient-flow case;
+- variants for 1, 5, 10, 25 and 50 years in one polygon layer;
+- map-canvas preview without temporary project layers;
+- result summaries, HTML/PDF reports and `.gcz.json` project files;
+- modeless, resizable and scrollable dialog;
+- QGIS 3 / Qt5 and QGIS 4 / Qt6 compatibility layer.
 
-Maciej Nikiel & Grzegorz Nikiel
+## Direction convention
 
-## License
+Regional groundwater-flow direction is entered as an azimuth measured clockwise from North:
 
-GNU General Public License v2.0 or later
+- `0°` — North;
+- `90°` — East;
+- `180°` — South;
+- `270°` — West.
 
-## Status
+When the hydraulic gradient is zero, direction does not affect the result.
 
-Pre-release version under validation before submission
-to the official QGIS Plugin Repository.
+## Main assumptions and limitations
+
+The current method assumes one fully penetrating well pumping at a constant rate, a homogeneous and isotropic aquifer of constant saturated thickness, steady horizontal flow under the Dupuit assumption, and uniform or zero regional groundwater flow. It does not represent hydrodynamic boundaries, local recharge, leakage, storage, dispersion, sorption or interacting wells.
+
+For `T̃ > 2.85`, the explicit upstream-distance approximation proposed by Ceric and Haitjema (2005) may slightly underestimate the exact implicit value. The plugin displays a warning in that range.
+
+A calculated capture zone is an analytical approximation. It is not automatically a legally designated protection area and requires hydrogeological review of the conceptual model and input data.
+
+## Installation
+
+Install the ZIP in QGIS through **Plugins → Manage and Install Plugins → Install from ZIP**.
+
+## License and authors
+
+GPL-2.0-or-later. Authors: **Maciej Nikiel & Grzegorz Nikiel**.
+
+
+## Project links
+
+- Source code and documentation: https://github.com/gnikiel/GEAQUA-Capture-Zones
+- Bug reports and feature requests: https://github.com/gnikiel/GEAQUA-Capture-Zones/issues
+
+## Release status
+
+Version 0.39 is the first public experimental release candidate prepared for submission to the official QGIS Plugin Repository.
