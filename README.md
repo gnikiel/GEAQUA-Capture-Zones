@@ -4,7 +4,7 @@ A bilingual Polish-English QGIS plugin for analytical delineation of groundwater
 
 ## Current method
 
-Version 0.39 implements the analytical approximations described by:
+Version 0.40 implements the analytical approximations described by:
 
 > Ceric, A., Haitjema, H. (2005). *On Using Simple Time-of-Travel Capture Zone Delineation Methods*. Ground Water, 43(3), 408–412. DOI: 10.1111/j.1745-6584.2005.0035.x.
 
@@ -63,4 +63,4 @@ GPL-2.0-or-later. Authors: **Maciej Nikiel & Grzegorz Nikiel**.
 
 ## Release status
 
-Version 0.39 is the first public experimental release candidate prepared for submission to the official QGIS Plugin Repository.
+Version 0.40 is the first public experimental release candidate prepared for submission to the official QGIS Plugin Repository. It includes security-scan cleanup without changes to the calculation method.

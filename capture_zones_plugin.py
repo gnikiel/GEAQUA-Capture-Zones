@@ -218,8 +218,8 @@ class GEAQUACaptureZonesPlugin:
         # immediately after enabling the plugin. No toolbar reference is kept.
         try:
             self.iface.pluginToolBar().show()
-        except (RuntimeError, AttributeError):
-            pass
+        except (RuntimeError, AttributeError) as exc:
+            self.logger.debug("Plugins toolbar could not be shown: %s", exc)
         self.first_start = True
 
 
@@ -227,28 +227,28 @@ class GEAQUACaptureZonesPlugin:
         """Remove QGIS actions and temporary canvas items without stale Qt wrappers."""
         try:
             self.clear_preview(immediate=True)
-        except (RuntimeError, AttributeError):
-            pass
+        except (RuntimeError, AttributeError) as exc:
+            self.logger.debug("Preview cleanup skipped during plugin unload: %s", exc)
 
         for action in list(self.actions):
             # QGIS may already be tearing down menus/toolbars. Every removal is
             # independent so a deleted C++ wrapper cannot abort the rest.
             try:
                 self.iface.removePluginMenu(self.menu, action)
-            except (RuntimeError, AttributeError, TypeError):
-                pass
+            except (RuntimeError, AttributeError, TypeError) as exc:
+                self.logger.debug("Menu action cleanup skipped: %s", exc)
             try:
                 self.iface.removeToolBarIcon(action)
-            except (RuntimeError, AttributeError, TypeError):
-                pass
+            except (RuntimeError, AttributeError, TypeError) as exc:
+                self.logger.debug("Toolbar action cleanup skipped: %s", exc)
             try:
                 action.triggered.disconnect(self.run)
-            except (RuntimeError, TypeError):
-                pass
+            except (RuntimeError, TypeError) as exc:
+                self.logger.debug("Action signal was already disconnected: %s", exc)
             try:
                 action.deleteLater()
-            except RuntimeError:
-                pass
+            except RuntimeError as exc:
+                self.logger.debug("Action object was already deleted: %s", exc)
         self.actions.clear()
 
         if self.dlg is not None:
@@ -257,8 +257,8 @@ class GEAQUACaptureZonesPlugin:
             try:
                 dialog.hide()
                 dialog.deleteLater()
-            except RuntimeError:
-                pass
+            except RuntimeError as exc:
+                self.logger.debug("Dialog object was already deleted: %s", exc)
 
     # ========================================================================
     # QGIS Integration Methods
@@ -682,17 +682,18 @@ class GEAQUACaptureZonesPlugin:
             try:
                 band.reset(QGIS_GEOMETRY_POLYGON)
                 band.hide()
-            except RuntimeError:
+            except RuntimeError as exc:
                 # The canvas may already be shutting down during QGIS exit.
-                pass
+                self.logger.debug("Preview canvas item was already deleted: %s", exc)
 
         if hasattr(self, "dlg") and self.dlg:
             self.dlg.set_preview_available(False)
 
         try:
             self.iface.mapCanvas().refresh()
-        except Exception:
-            pass
+        except RuntimeError as exc:
+            # QGIS may delete the canvas while the application or plugin is closing.
+            self.logger.debug("Map canvas refresh skipped during shutdown: %s", exc)
 
     def show_preview(
         self,
@@ -1092,8 +1093,8 @@ class GEAQUACaptureZonesPlugin:
             finally:
                 try:
                     os.remove(map_path)
-                except OSError:
-                    pass
+                except OSError as exc:
+                    self.logger.debug("Temporary report map could not be removed: %s", exc)
 
             message = self.ui_text("report_saved", language, path=path)
             if hasattr(self, "dlg") and self.dlg:

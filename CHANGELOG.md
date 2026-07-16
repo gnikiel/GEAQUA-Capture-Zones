@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.40 — security-scan cleanup before publication
+
+- Replaced a silent `try/except/pass` around map-canvas refresh with targeted `RuntimeError` handling and debug logging.
+- Removed the unnecessary `xml.etree.ElementTree` parser from the shipped release-integrity test; the trusted Qt Designer `.ui` file is now checked as text.
+- Calculation algorithms, geometry, reports and user-facing functionality are unchanged from version 0.39.
+
 ## 0.39 — first public experimental release candidate
 
 - Added the official GitHub homepage, source repository and issue tracker to `metadata.txt`.

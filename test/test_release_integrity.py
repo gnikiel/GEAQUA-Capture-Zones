@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Pre-publication integrity checks for GEAQUA Capture Zones v0.39."""
+"""Pre-publication integrity checks for GEAQUA Capture Zones v0.40."""
 
 import configparser
 import os
@@ -7,7 +7,6 @@ from pathlib import Path
 import re
 import sys
 import unittest
-import xml.etree.ElementTree as ET
 
 PLUGIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PARENT_DIR = os.path.dirname(PLUGIN_DIR)
@@ -32,8 +31,8 @@ class TestReleaseIntegrity(unittest.TestCase):
     def test_identity_and_version(self):
         self.assertEqual(PLUGIN_ID, "GEAQUA_Capture_Zones")
         self.assertEqual(PLUGIN_NAME, "GEAQUA Capture Zones")
-        self.assertEqual(PLUGIN_VERSION, "0.39")
-        self.assertEqual(WINDOW_TITLE, "GEAQUA Capture Zones v0.39")
+        self.assertEqual(PLUGIN_VERSION, "0.40")
+        self.assertEqual(WINDOW_TITLE, "GEAQUA Capture Zones v0.40")
         self.assertEqual(PLUGIN_AUTHORS, "Maciej Nikiel & Grzegorz Nikiel")
 
     def test_public_repository_links(self):
@@ -62,10 +61,17 @@ class TestReleaseIntegrity(unittest.TestCase):
         self.assertIn("class GEAQUACaptureZonesPlugin", main)
 
     def test_ui_title_and_language_defaults(self):
-        root = ET.parse(os.path.join(PLUGIN_DIR, "ui", "capture_zone_dialog.ui")).getroot()
-        title = root.find("./widget/property[@name='windowTitle']/string")
-        self.assertIsNotNone(title)
-        self.assertEqual(title.text, WINDOW_TITLE)
+        # The .ui file is trusted package data. Read it as text instead of using
+        # a general-purpose XML parser, so release security scanners do not flag
+        # an unnecessary XML attack surface in the shipped test suite.
+        ui_source = self._source("ui/capture_zone_dialog.ui")
+        title_match = re.search(
+            r'<property\s+name="windowTitle">\s*<string>([^<]+)</string>',
+            ui_source,
+            flags=re.DOTALL,
+        )
+        self.assertIsNotNone(title_match)
+        self.assertEqual(title_match.group(1).strip(), WINDOW_TITLE)
         dialog = self._source("ui/capture_zone_dialog.py")
         self.assertIn('self.comboLanguage.addItem("Polski", "pl")', dialog)
         self.assertIn('self.comboLanguage.addItem("English", "en")', dialog)
