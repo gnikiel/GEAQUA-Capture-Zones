@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.41 — code-quality cleanup and contact update
+
+- Resolved all four Flake8 findings reported for version 0.40.
+- Renamed the ambiguous local variable `I` to `hydraulic_gradient` in the ambient-flow function and its unit test.
+- Removed duplicate `sys` and `QApplication` imports from the standalone dialog test block.
+- Updated the plugin contact email to `g.nikiel@gmail.com`.
+- Calculation formulas, geometry generation and user-facing functionality are unchanged from version 0.40.
+
 ## 0.40 — security-scan cleanup before publication
 
 - Replaced a silent `try/except/pass` around map-canvas refresh with targeted `RuntimeError` handling and debug logging.

@@ -1488,9 +1488,6 @@ if __name__ == '__main__':
 
     Note: Requires QGIS environment to be initialized.
     """
-    import sys
-    from qgis.PyQt.QtWidgets import QApplication
-
     # Create application
     app = QApplication(sys.argv)
 

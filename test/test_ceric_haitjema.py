@@ -122,9 +122,9 @@ class TestHydraulicCalculations(unittest.TestCase):
     def test_calculate_ambient_flow(self):
         """Test ambient flow calculation."""
         k = 8.64  # m/d
-        I = 0.002809  # -
+        hydraulic_gradient = 0.002809  # -
         m = 41.0  # m
-        Qo = calculate_ambient_flow(k, I, m)
+        Qo = calculate_ambient_flow(k, hydraulic_gradient, m)
         # Expected: 8.64 × 0.002809 × 41 = 0.995
         self.assertAlmostEqual(Qo, 0.995, places=2)
 

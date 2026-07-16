@@ -48,7 +48,7 @@ class CaptureZoneParameters:
         m: Aquifer thickness [m]
         n: Effective porosity [-]
         Q: Well discharge [m³/d]
-        I: Hydraulic gradient [-]
+        hydraulic_gradient: Hydraulic gradient [-]
         t: Protection time [years]
         flow_direction: Angle from North [degrees, clockwise]
         well_x: Well X coordinate [m]
@@ -106,7 +106,7 @@ def validate_parameters(params: CaptureZoneParameters) -> None:
     logger.info("Parameter validation successful")
 
 
-def calculate_ambient_flow(k: float, I: float, m: float) -> float:
+def calculate_ambient_flow(k: float, hydraulic_gradient: float, m: float) -> float:
     """
     Calculate ambient flow per unit width.
 
@@ -115,16 +115,16 @@ def calculate_ambient_flow(k: float, I: float, m: float) -> float:
 
     Args:
         k: Hydraulic conductivity [m/d]
-        I: Hydraulic gradient [-]
+        hydraulic_gradient: Hydraulic gradient [-]
         m: Aquifer thickness [m]
 
     Returns:
         Qo: Ambient flow per unit width [m²/d]
 
     Formula:
-        Qo = k × I × m
+        Qo = k × hydraulic_gradient × m
     """
-    Qo = k * I * m
+    Qo = k * hydraulic_gradient * m
     logger.debug(f"Ambient flow Qo = {Qo:.3f} m²/d")
     return Qo
 

@@ -1,4 +1,4 @@
-# Methodology — GEAQUA Capture Zones v0.40
+# Methodology — GEAQUA Capture Zones v0.41
 
 ## Primary source
 

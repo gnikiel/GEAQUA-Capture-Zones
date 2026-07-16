@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Pre-publication integrity checks for GEAQUA Capture Zones v0.40."""
+"""Pre-publication integrity checks for GEAQUA Capture Zones v0.41."""
 
 import configparser
 import os
@@ -31,8 +31,8 @@ class TestReleaseIntegrity(unittest.TestCase):
     def test_identity_and_version(self):
         self.assertEqual(PLUGIN_ID, "GEAQUA_Capture_Zones")
         self.assertEqual(PLUGIN_NAME, "GEAQUA Capture Zones")
-        self.assertEqual(PLUGIN_VERSION, "0.40")
-        self.assertEqual(WINDOW_TITLE, "GEAQUA Capture Zones v0.40")
+        self.assertEqual(PLUGIN_VERSION, "0.41")
+        self.assertEqual(WINDOW_TITLE, "GEAQUA Capture Zones v0.41")
         self.assertEqual(PLUGIN_AUTHORS, "Maciej Nikiel & Grzegorz Nikiel")
 
     def test_public_repository_links(self):
@@ -43,6 +43,7 @@ class TestReleaseIntegrity(unittest.TestCase):
         self.assertIn("experimental=True", metadata)
         self.assertIn("qgisMaximumVersion=4.99", metadata)
         self.assertIn("hasProcessingProvider=False", metadata)
+        self.assertIn("email=g.nikiel@gmail.com", metadata)
 
     def test_metadata_matches_runtime_identity(self):
         parser = configparser.ConfigParser()
